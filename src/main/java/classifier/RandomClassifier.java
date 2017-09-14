@@ -13,18 +13,16 @@ import java.util.Random;
 public class RandomClassifier extends AbstractClassifier
 {
     private Random rng = new Random(System.currentTimeMillis());
-    private List<Integer> possibleLabels;
 
-    public RandomClassifier(List<Image> trainingData,
-                            List<Integer> possibleLabels)
+    public RandomClassifier(List<Integer> possibleLabels)
     {
-        super(trainingData, possibleLabels);
+        super(possibleLabels);
     }
 
     @Override
-    protected void train(List<Image> data, List<Integer> possibleLabels)
+    protected void innerTrain(List<Image> data)
     {
-        this.possibleLabels = possibleLabels;
+        // nothing to do
     }
 
     @Override

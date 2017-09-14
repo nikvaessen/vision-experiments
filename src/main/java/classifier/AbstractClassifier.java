@@ -19,6 +19,11 @@ public abstract class AbstractClassifier
 
     private void verify(List<Image> trainingData)
     {
+        if(trainingData.size() == 0)
+        {
+            throw new IllegalArgumentException("Training data is empty");
+        }
+
         for(Image i : trainingData)
         {
             if(!possibleLabels.contains(i.getLabel()))

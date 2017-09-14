@@ -1,4 +1,5 @@
 import classifier.AbstractClassifier;
+import classifier.KNearestNeighbourClassifier;
 import classifier.RandomClassifier;
 import data.Cifar10;
 import data.Image;
@@ -31,15 +32,20 @@ public class App
         List<Image> testSet = cifar10.getTestImages();
         List<Integer> possibleLabels
             = new ArrayList<>(cifar10.getLabelNames().keySet());
+        List<String> labelDescriptions = new ArrayList<>(cifar10.getLabelNames().values());
+
+        cifar10 = null;
+        System.runFinalization();
 
         System.out.println("Cifar 10 data loading in %d ms!");
         System.out.println(possibleLabels);
-        System.out.println(cifar10.getLabelNames().values());
+        System.out.println(labelDescriptions);
+
+        AbstractClassifier classifier = new KNearestNeighbourClassifier(possibleLabels);
 
         System.out.println("Training Random classifier!");
         long start = System.currentTimeMillis();
-        AbstractClassifier classifier = new RandomClassifier(trainingSet,
-                                                             possibleLabels);
+        classifier.train(trainingSet);
         long end = System.currentTimeMillis();
 
         System.out.printf("Training took %d ms%n", end-start);

@@ -29,7 +29,7 @@ public class Cifar10
      */
     private static final String BIN_NAMES = "data_batch_%d.bin";
     private static final int MIN_BIN_NUMBER = 1;
-    private static final int MAX_BIN_NUMBER = 5;
+    private static final int MAX_BIN_NUMBER = 1;
 
     /**
      * File name for the meta data file
@@ -224,26 +224,24 @@ public class Cifar10
 
         for(File f: filesInDir)
         {
-            if(!expectedNames.remove(f.getName()))
-            {
-                return false;
-            }
+            expectedNames.remove(f.getName());
         }
-        return true;
+
+        return expectedNames.size() == 0;
     }
 
     public List<Image> getTrainImages()
     {
-        return trainImages;
+        return Collections.unmodifiableList(trainImages);
     }
 
     public List<Image> getTestImages()
     {
-        return testImages;
+        return Collections.unmodifiableList(testImages);
     }
 
     public Map<Integer, String> getLabelNames()
     {
-        return labelNames;
+        return Collections.unmodifiableMap(labelNames);
     }
 }
