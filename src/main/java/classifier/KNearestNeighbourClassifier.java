@@ -6,6 +6,7 @@ import org.nd4j.linalg.factory.NDArrayFactory;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.util.ArrayUtil;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,44 +34,17 @@ public class KNearestNeighbourClassifier
         INDArray red, green, blue;
         for(int i = 0; i < data.size(); i++)
         {
-            image = data.get(i);
-            red = Nd4j.create(image.getRed());
-            green = Nd4j.create(image.getGreen());
-            blue = Nd4j.create(image.getBlue());
-            images.putRow(i, Nd4j.concat(0, red, green , blue));
+            images.putRow(i, pixelColumnVectorFromImage(data.get(i)));
         }
     }
 
     @Override
     public int predict(Image image)
     {
+        INDArray vector = pixelColumnVectorFromImage(image);
+        System.out.println(Arrays.toString(vector.shape()));
+
         return 0;
-    }
-
-    private double distance(Image x, Image y)
-    {
-        double distance = 0;
-        distance += distanceL1(x.getRed(), y.getRed());
-        distance += distanceL1(x.getGreen(), y.getGreen());
-        distance += distanceL1(x.getBlue(), y.getBlue());
-
-        return distance;
-    }
-
-    private double distanceL1(int[] ar1, int[] ar2)
-    {
-        if(ar1.length != ar2.length)
-        {
-            throw new IllegalArgumentException("Arrays should be of equal length");
-        }
-
-        double d = 0;
-        for(int i = 0; i < ar1.length; i++)
-        {
-            d += Math.sqrt(Math.pow(ar1[i] - ar2[i], 2));
-        }
-
-        return d;
     }
 
     @Override
@@ -78,4 +52,29 @@ public class KNearestNeighbourClassifier
     {
         return null;
     }
+
+
+    private INDArray pixelColumnVectorFromImage(Image image)
+    {
+        INDArray red, green, blue;
+
+        red = Nd4j.create(copyFromIntArray(image.getRed()));
+        green = Nd4j.create(copyFromIntArray(image.getGreen()));
+        blue = Nd4j.create(copyFromIntArray(image.getBlue()));
+
+        return Nd4j.concat(1, red, green , blue);
+    }
+
+    private static double[] copyFromIntArray(int[] source)
+    {
+        double[] dest = new double[source.length];
+
+        for(int i=0; i<source.length; i++)
+        {
+            dest[i] = source[i];
+        }
+
+        return dest;
+    }
+
 }

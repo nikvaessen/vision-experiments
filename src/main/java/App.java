@@ -43,7 +43,7 @@ public class App
 
         AbstractClassifier classifier = new KNearestNeighbourClassifier(possibleLabels);
 
-        System.out.println("Training Random classifier!");
+        System.out.println("Training " + classifier.name() + "classifier!");
         long start = System.currentTimeMillis();
         classifier.train(trainingSet);
         long end = System.currentTimeMillis();
